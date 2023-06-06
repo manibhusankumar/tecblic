@@ -35,7 +35,7 @@ class LoginSerializer(TokenObtainPairSerializer):
                     'OTP Verification',
                     f"your otp is {key1}",
                     'EMAIL_HOST_USER',
-                    ['priyank.sharma@consolebit.com'],
+                    ['mani.bhushan@consolebit.com'],
                     fail_silently=False,
         )
         attrs['secret'] = key['secret']
