@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
-        fields = ['id', 'first_name', 'last_name', 'email', 'date_joined', 'is_staff', 'is_active', 'is_superuser']
+        fields = ['id', 'first_name', 'last_name', 'email', 'date_joined', 'is_staff', 'is_active', 'is_superuser','user_type']
 
 
 def generate_otp(user):
@@ -58,7 +58,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.User
-        fields = ['id', 'email', 'password', 'password2', 'first_name', 'last_name']
+        fields = ['id', 'email', 'password', 'password2', 'first_name', 'last_name','user_type']
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -68,7 +68,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = models.User.objects.create(email=validated_data['email'], first_name=validated_data['first_name'],
-                                          last_name=validated_data['last_name'])
+                                          last_name=validated_data['last_name'],user_type=validated_data['user_type'])
 
         user.set_password(validated_data['password'])
         user.is_active = True
@@ -130,3 +130,12 @@ class VerfiyOTPforgotpassword(serializers.ModelSerializer):
         if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError({"password": "password field didn't match"})
         return attrs
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+   
+    class Meta:
+        model = models.User
+        fields = ['id', 'email', 'first_name', 'last_name','user_type']
+       
+    

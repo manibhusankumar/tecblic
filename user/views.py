@@ -1,12 +1,16 @@
 import base64
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .serializers import LoginSerializer, RegisterSerializer, ChangePasswordSerializer, VerifySerializer, generate_otp,\
+from .serializers import LoginSerializer, RegisterSerializer, ChangePasswordSerializer, UserProfileSerializer, VerifySerializer, generate_otp,\
     UserSerializer, ForgotPasswordSerializer, VerfiyOTPforgotpassword
 from rest_framework_simplejwt.views import TokenViewBase
 from rest_framework import generics
 from rest_framework.response import Response
 from .models import User
+from rest_framework.generics import RetrieveAPIView, UpdateAPIView
+from .permissions import IsUser
+
+from user import serializers
 
 
 class LoginView(TokenViewBase):
@@ -104,3 +108,14 @@ class VerifyOTPforgotpasswordView(generics.GenericAPIView):
             return Response('successfully changed your password')
         else:
             return Response('Wrong OTP')    
+
+class UserProfileAPIView(RetrieveAPIView, UpdateAPIView):
+    permission_classes = (IsUser,)
+    serializer_class = serializers.UserProfileSerializer
+
+    def get_object(self):
+        return self.request.user
+
+    def get_serializer_class(self):
+        return UserProfileSerializer
+        

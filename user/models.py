@@ -4,6 +4,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from user.enums import ROLE
+
 
 class UserAccountManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -43,6 +45,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(_('active'), default=False, help_text=_(
         'Designates whether this user should be treated as active.'), )
     date_joined = models.DateTimeField(_('Date joined'), default=timezone.now)
+    user_type = models.CharField(choices=ROLE, max_length=50,null=True, blank=True)
+
 
     objects = UserAccountManager()
     USERNAME_FIELD = 'email'
